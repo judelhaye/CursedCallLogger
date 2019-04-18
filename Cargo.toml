@@ -1,0 +1,9 @@
+[package]
+name = "crm"
+version = "0.1.0"
+authors = ["Julien Delhaye <jdelhaye@archipelia.com>"]
+edition = "2018"
+
+[dependencies]
+cursive = "0.11"
+chrono = "0.4.6"
