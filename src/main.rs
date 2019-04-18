@@ -34,6 +34,7 @@ fn main() {
 }
 
 fn add_call(s: &mut Cursive) {
+
     // on success put the smc in the SelectView
     fn ok(s: &mut Cursive, smc: &str) {
         s.call_on_id("select", |view: &mut SelectView<String>| {
@@ -45,21 +46,33 @@ fn add_call(s: &mut Cursive) {
     s.add_layer(Dialog::around(LinearLayout::vertical()
     .child(EditView::new()
             .on_submit(ok)
+            .with_id("cust")
+            .fixed_width(10))
+    .child(EditView::new()
+            .on_submit(ok)
             .with_id("smc")
-            .fixed_width(10)))
-        .title("Who is calling ?")
-        .button("Ok", |s| {
-            let now  = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
-            let call_info =
-                s.call_on_id("smc", |view: &mut EditView| {
-                    view.get_content()
-                }).unwrap();
-            let smc = format!("{:?} - {}", now, call_info);
-            ok(s, &smc);
-        })
-        .button("Cancel", |s| {
-            s.pop_layer();
-        }));
+            .fixed_width(10))
+    )
+
+    .title("Who is calling ?")
+    .button("Ok", |s| {
+        let mut now  = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
+
+        /* get date on clic */
+        let call_info =
+            s.call_on_id("smc", |view: &mut EditView| {
+                view.get_content()
+            }).unwrap();
+        let customer =
+            s.call_on_id("cust", |view: &mut EditView| {
+                view.get_content()
+            }).unwrap();
+        let smc = format!("{:?} - {} - {}", now, customer, call_info);
+        ok(s, &smc);
+    })
+    .button("Cancel", |s| {
+        s.pop_layer();
+    }));
 }
 
 
